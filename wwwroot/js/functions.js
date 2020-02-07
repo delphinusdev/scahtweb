@@ -178,7 +178,13 @@ function inputvacios($inputs, opcio) {
                 if (inputs[i].tagName === 'SELECT') {
                     if (opci === 0) {
                         $('#' + inputid).selectpicker('setStyle', 'haserroresselect', 'add');
-                    } else {
+                    } else if (opci === 3) {                      
+
+                        //$($($('#' + inputid).parent()).select2("container")).addClass("has-danger");
+
+
+                        //$($('#' + inputid).parent()).select2({ customClass: "Myselectbox"});
+                    }else {
                         //$($('#' + inputid).parent()).addClass('has-danger-select');
                         $($('#' + inputid).parent()).addClass('has-danger');
                         
