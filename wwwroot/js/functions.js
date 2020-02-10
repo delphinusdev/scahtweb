@@ -152,25 +152,36 @@ function inputvacios($inputs, opcio) {
                 //console.log(inputs[i].type );
                 if (inputs[i].type === 'file') {
                     //saber si un div tiene con tenido                   
-                    //var cantidadfoto = 0;                   
-                    //if ($(".file-preview-thumbnails > .file-preview-frame").length > 0) {
-                    //    cantidadfoto = $(".file-preview-thumbnails > .file-preview-frame").size();                       
-                    //}
+                    var cantidadfoto = 0;                  
+                    var cantidadfoto2 = 0;                  
+                    if ($(".file-preview-thumbnails > .file-preview-frame").length > 0) {
+                        cantidadfoto = $(".file-preview-thumbnails > .file-preview-frame").size();                       
+                        cantidadfoto2 = $(".file-preview-thumbnails > .file-preview-frame").length();                       
+                    }
+                    console.log(cantidadfoto);
+                    console.log("<-->");
+                    console.log(cantidadfoto2);
 
-                    //if (cantidadfoto > 0) {
-                    //    $($($('#' + inputid).parent()).parent()).parent().removeClass('has-danger');
-                    //    todoCorrecto = true;
-                    //}
-                    //if (cantidadfoto <= 0) {
-                        $($('#' + inputid).siblings('div')).addClass('has-danger-file');
+                    if (cantidadfoto > 0) {
+                        $($($('#' + inputid).parent()).parent()).parent().removeClass('has-danger');
+                        todoCorrecto = true;
+                    }
+                    if (cantidadfoto === 0) {
+                   
+                    //$($('#' + inputid).siblings('div')).addClass('has-danger-file');
+                    
+                        $($($('#' + inputid).parent()).parent()).parent().addClass('has-danger');
+                    ////bueno
+                    //$($('#' + inputid).siblings('div')).addClass('has-danger');
                         todoCorrecto = false;
-                    //}
+                    }
                 }
                 if (inputs[i].tagName === 'INPUT' || inputs[i].tagName === 'TEXTAREA') {
                     if (inputs[i].type !== 'file') {
                         //$('#' + inputid).addClass('has-danger');
                         $($('#' + inputid).parent()).addClass('has-danger');
                         $($('#' + inputid).parent()).removeClass('has-success');
+                        
                        
                         todoCorrecto = false;
                     }
@@ -203,7 +214,7 @@ function inputvacios($inputs, opcio) {
                 }
                 $($('#' + inputid).parent()).removeClass('has-danger');
                 $($('#' + inputid).parent()).addClass('has-success');
-                //$($($('#' + inputid).parent()).parent()).parent().removeClass('has-danger');
+                $($($('#' + inputid).parent()).parent()).parent().removeClass('has-danger');
             }
         }
     }
@@ -790,6 +801,7 @@ function enviarfotos(previewId, index, idimagen, divcontenimagendatos) {
             var imgname = $(this).find('input:hidden[name=imgname]').val();
             var type = $(this).find('input:hidden[name=type]').val();
             var idprev = $(this).find('input:hidden[name=idprev]').val();
+            var size = $(this).find('input:hidden[name=size]').val();
             var extension = $(this).find('input:hidden[name=extension]').val();
 
             if (unqid !== '') {
@@ -797,6 +809,7 @@ function enviarfotos(previewId, index, idimagen, divcontenimagendatos) {
                 item['imgname'] = imgname;
                 item['type'] = type;
                 item['idprev'] = idprev;
+                item['size'] = size;
                 item['extension'] = extension;
 
                 datosimg.push(item);
