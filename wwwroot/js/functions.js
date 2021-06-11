@@ -850,4 +850,5 @@ function enviarfotos(previewId, index, idimagen, divcontenimagendatos) {
             }
         }
         return false;
-    }
+}
+
