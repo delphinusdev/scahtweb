@@ -71,41 +71,47 @@ function fillinputselectoption(dato, optionselectid, id, nombre, title, dir) {
     });
 }
 
-function postInfo(urls, data, success) {
+async function postInfo(urls, data, success) {
+
+   
+
     var infojs = JSON.stringify(data);
    
 
     if (infojs === undefined) {
-        //console.log("indefinido");
+      
         return false;
         // se ejecutan estas instrucciones
     } else {
     
 
-    var url = urls || "funciones/funciones.aspx";
-    var params = typeof infojs === 'string' ? infojs : Object.keys(infojs).map(
+        var url = urls || "funciones/funciones.aspx";
+        var params = typeof infojs === 'string' ? infojs : Object.keys(infojs).map(
         function (k) { return encodeURIComponent(k) + '=' + encodeURIComponent(infojs[k]); }
-    ).join('&');
-    var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
-    xhr.open('POST', url, true);
-    xhr.responseType = "json";
-    xhr.onload = function () {
-    };
-    xhr.onreadystatechange = function () {
+            ).join('&');
+        var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+        xhr.open('POST', url, true);
+        xhr.responseType = "json";
+        xhr.onload = function () {
+        };
+        xhr.onreadystatechange = function () {
         
         if (xhr.readyState > 3 && xhr.status === 200) {
 
             success(xhr.response);
+            
         } else if (xhr.readyState > 3 && xhr.status === 500) {
             var error = [{ status: 0, msg: xhr.response.Message }];
             success(error);
         }
-    };
-    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-    xhr.send(params);
-        return xhr;
-    }
+        };
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        xhr.send(params);
+        return xhr
+       
+     }
+  
 }
 
 function msgnew(idbtn, clase, timeOut) {
@@ -144,12 +150,12 @@ function inputvacios($inputs, opcio) {
     $(".has-danger-select").removeClass("has-danger-select");
     for (var i = 0; i < inputs.length; i++) {
         var inputid = $(inputs[i]).attr('id');
-        //console.log(inputid);
+      
         if (inputid !== undefined) {
             var valorinp = $.trim($('#' + inputid).val());
           
             if (valorinp === null || valorinp === '-0' || /^\s*$/.test(inputs[i].value)) {
-                //console.log(inputs[i].type );
+               
                 if (inputs[i].type === 'file') {
                     //saber si un div tiene con tenido                   
                     var cantidadfoto = 0;                  
@@ -158,9 +164,7 @@ function inputvacios($inputs, opcio) {
                         cantidadfoto = $(".file-preview-thumbnails > .file-preview-frame").size();                       
                         cantidadfoto2 = $(".file-preview-thumbnails > .file-preview-frame").length();                       
                     }
-                    console.log(cantidadfoto);
-                    console.log("<-->");
-                    console.log(cantidadfoto2);
+               
 
                     if (cantidadfoto > 0) {
                         $($($('#' + inputid).parent()).parent()).parent().removeClass('has-danger');
@@ -402,6 +406,64 @@ function procesarFormularior(selector, template) {
 
     return data;
 }
+async function insert_catalogo_qr(datos, urlbase) {
+    'use strict';
+
+    //let resultPromise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
+        var result = "test1223";
+    var datosins = datos || [], urlbaseins = urlbase || "../admin/funciones.aspx/InsertDatos";  
+
+         result = postInfo(urlbase, datosins, function (datas) {
+        var msg = "";
+        var status = parseInt(datas["status"]);
+        result = datas;
+        
+        if (status === 1) {
+
+            msg = datas["msg"];
+            //$(".close").trigger('click');
+            // multiples();
+            var table = $('#example').DataTable({
+                'destroy': true,
+                'paging': true,
+                'lengthChange': true,
+                'searching': true,
+                'ordering': true,
+                'info': true,
+                'autoWidth': true
+            });
+            table.destroy();
+            cargatabla();
+            msgnew("", "toast-top-full-width", 6000);
+            Command: toastr["success"](msg, "");           
+            resolve(result)
+
+        } else {
+            //mensajeshow(status, datas['msg']);
+
+            msgnew("", "toast-top-full-width", 6000);
+            Command: toastr["error"](msg, "");
+            
+        }
+        
+     });
+
+       
+      
+
+    });
+
+    //resultPromise.then((successMessage) => {
+    
+    //    console.log( "successMessage");
+    //    console.log(successMessage);
+    //    return successMessage;
+    //});
+
+  
+
+}
 function insert_catalogo(datos, urlbase) {
     'use strict';
     var datosins = datos || [], urlbaseins = urlbase || "../admin/funciones.aspx/InsertDatos", result = '';
@@ -437,7 +499,6 @@ function insert_catalogo(datos, urlbase) {
 
             msgnew("", "toast-top-full-width", 6000);
             Command: toastr["error"](msg, "");
-            console.log(datas["info"]);
         }
         return result;
     });
@@ -478,7 +539,7 @@ function insert_catalogo_empresas(datos, urlbase) {
 
             msgnew("", "toast-top-full-width", 6000);
             Command: toastr["error"](msg, "");
-            console.log(datas["info"]);
+          
         }
         return result;
     });
@@ -522,7 +583,7 @@ function insert_catalogo_operadores(datos, urlbase) {
 
             msgnew("", "toast-top-full-width", 6000);
             Command: toastr["error"](msg, "");
-            console.log(datas["info"]);
+            
         }
         return result;
     });
@@ -537,8 +598,7 @@ function insert_catalogo_opcional(datos, urlbase,tabla,funcion) {
 
     postInfo(urlbase, datosins, function (datas) {
 
-        console.log("despues");
-        console.log(datas);
+      
         var msg = "";
         var status = parseInt(datas["status"]);
         var result = datas;
@@ -567,9 +627,9 @@ function insert_catalogo_opcional(datos, urlbase,tabla,funcion) {
 
             msgnew("", "toast-top-full-width", 6000);
             Command: toastr["error"](msg, "");
-            console.log(datas["info"]);
+           
         }
-        console.log("todo bien hasta aqui");
+       
         return result;
     });
 
